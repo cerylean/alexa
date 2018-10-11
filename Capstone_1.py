@@ -5,6 +5,7 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.cluster import KMeans
+import pdb
 
 def segment_stars(df,stars,stars1):
         df = df[(df['review_rating']==stars) | (df['review_rating']==stars1)]
@@ -60,14 +61,15 @@ def define_stopwords(add_to_list,remove_from_list,limit=None):
     stop_words_adj = set([word for word in stop_words_limit if word not in remove_from_list] + add_to_list)
     return stop_words_adj
 
-def common_review_sentiments_df(clean_data_list,ngram,cluster=1,max_features=5000,sentiments_returned=15):
+def common_review_sentiments(clean_data_list,ngram,cluster=1,max_features=5000,sentiments_returned=15):
     sentiment_list = []
     col_name = []
-    for i in clean_data_list:
-        sentiment_list.append(cluster_text(clean_data,ngram,cluster,max_features))
-        col_name.append([name for name in globals() if globals()[name] is d])
-    
-        array = np.array(list)
+    # pdb.set_trace()
+    for lst in clean_data_list:
+        sentiment_list.append(cluster_text(lst,ngram,cluster,max_features,sentiments_returned))
+        var_name = [name for name in globals() if globals()[name] is lst]
+        col_name.append(var_name[0])
+    df = pd.DataFrame(sentiment_list,col_name).T
     df.to_csv('common_review_sentiments.csv')
     print(df)
 
@@ -75,7 +77,7 @@ df = pd.read_csv('amazon_reviews.csv', encoding='ISO-8859-1',usecols=[1,2,3,4,5,
 stopwords = define_stopwords(['echo', 'generation','dot', 'dots','alexa' ],['more','not','against',"don't", "should've"],145)
 stars_5,stars_1 = segment_stars(df,5,5), segment_stars(df,1,1)
 cleaned_5, cleaned_1  = clean_data(stars_5,'review_text'), clean_data(stars_1,'review_text')
-# #
+common_review_sentiments([cleaned_5,cleaned_1],(4,4),1,5000,15)
 # df_star = pd.DataFrame()#
 # review_df(df_star,cleaned_5,'4-gram','5_star_wmax.csv',(4,4),1,5000)
 # review_df(df_star,cleaned_1,'4-gram','1_star_wmax.csv',(4,4),1,5000)
