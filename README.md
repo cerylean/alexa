@@ -4,7 +4,7 @@
 
 ### Data Source
 
-Coming from a customer success background, I was constantly searching for ways to find and analyze feedback. Building on the idea that quantitative feedback is only one piece of the picture, I wanted to breakdown a set of text data to attempt to identify the insights within that could inform future iterations of the product, customer success and marketing strategies. The data I drew my analysis from was ~13,000 customer reviews of Amazon's Echo Dot (2nd Generation).  There were six columns included in the file:
+Coming from a customer success background, I am constantly searching for ways to find and analyze feedback. Building on the idea that quantitative feedback is only one piece of the picture, I wanted to breakdown qualitative data to attempt to identify the insights within that could inform future iterations of the product, customer success and marketing strategies. The data I drew my analysis from was ~13,000 customer reviews of Amazon's Echo Dot (2nd Generation).  There were six columns included in the file:
 
     - Date of Review (dd/mm/yy)
     - Review Header (string)
@@ -44,7 +44,7 @@ The Bag-of-Words Model is a simplifying representation of large amounts of text 
 
 N-grams are a continues sequence of n number of words.  In certain cases, it is better to analyze text using sequences of words in order to derive a more complete context of meaning.  
 
-**Here is an example of a bi-gram:**
+**Example of a bi-gram:**
 
 ![ngram_demonstration](images/ngram_demo.png)
 
