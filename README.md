@@ -15,11 +15,11 @@ The reviews are mostly positive as shown by the below distribution of the star r
 
 ![Histogram](images/Histogram_of_Stars.png)
 
-Example of a 5-star review taken from Amazon:
+**Example of a 5-star review taken from Amazon:**
 
 ![5_Star_Review](images/5Star_Echo_Review.png)
 
-Example of a 1-star review taken from Amazon:
+**Example of a 1-star review taken from Amazon:**
 
 ![1_Star_Review](images/1Star_Echo_Review.png)
 
@@ -30,11 +30,11 @@ Example of a 1-star review taken from Amazon:
 
 The Bag-of-Words Model is a simplifying representation of large amounts of text used in Natural Language Processing.  It is also known as the vector space model. It transforms all the words in a set of documents into a single list of unique words and then creates a matrix, assigning each unique word to a column, and each document (in this case each review) to an individual row. As you can see in a simplified version below, each field is then assigned a numerical value based on the number of occurrences of each word in that particular document.
 
-Creating a list of unique words:
+**Creating a list of unique words:**
 
 ![vocab_demonstration](images/vocab_demo.png)
 
-Assigning values to each field:
+**Assigning values to each field:**
 
 ![vector_demonstration](images/vector_demo.png)
 
@@ -42,7 +42,7 @@ Assigning values to each field:
 
 N-grams are a continues sequence of n number of words.  In certain cases, it is better to analyze text using sequences of words in order to derive a more complete context of meaning.  
 
-Here is an example of a bi-gram:
+**Here is an example of a bi-gram:**
 
 ![ngram_demonstration](images/ngram_demo.png)
 
