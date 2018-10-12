@@ -45,6 +45,6 @@ Example of a 1-star Review:
 | 13 | tp link smart plug             | would not connect wifi          |
 | 14 | kids love asking questions     | not stay connected internet     |
 
-![key_words](images/key_words.gif)
+![key_words](images/key_words_2.gif)
 ### Future Work
 ### References
