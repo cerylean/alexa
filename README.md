@@ -1,6 +1,6 @@
 ## Alexa, open the pod bay doors.
 
-  ![Alexa](images/alexa_title.png)
+  ![Alexa](images/Alexa_Title.png)
 
 ### Data Source
 
@@ -89,6 +89,7 @@ However, since it didn't appear that the reviews could be readily clustered, I c
 | 12 | would highly recommend product | get questions answered not      |
 | 13 | tp link smart plug             | would not connect wifi          |
 | 14 | kids love asking questions     | not stay connected internet     |
+
 
 
 There are clear takeways in the resulting n-grams of the 5 star and 1 star reviews. You can see multiple sentiments reflected that can inform the  future marketing and product iterations of the Echo dot.
