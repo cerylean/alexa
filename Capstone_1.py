@@ -5,18 +5,22 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.cluster import KMeans
-import pdb
+from tabulate import tabulate
 
 
-def segment_stars(df,col_name,stars,stars1):
+def segment_stars(df,col_name,param1,param2):
     '''
-    Create a new dataframe filtered by parameter
+    Create a new dataframe filtered by up to two chosen parameters
 
-    INPUT: DataFrame, Column to filter by, filter parameter 1, filter parameter 2
+    INPUT:  DataFrame (df)
+            Column containing parameters (str)
+            Filter parameter 1 (str or int)
+            Filter parameter 2 (str or int)
+
     OUTPUT: DataFrame
 
     '''
-    df = df[(df['review_rating']==stars) | (df['review_rating']==stars1)]
+    df = df[(df[col_name]==param1) | (df[col_name]==param2)]
     df = df.reset_index()
     return df
 
@@ -24,12 +28,14 @@ def clean_data(dataframe,col):
     '''
     Removes punctuation and import errors from dataframe
 
-    INPUT: DataFrame, Column name to clean (as string)
-    OUTPUT: Cleaned DataFrame Series
+    INPUT:  DataFrame (df)
+            Column name to clean (string)
+
+    OUTPUT: Cleaned DataFrame Column (series)
 
     '''
     punctuation = '!"#$%&()*+,-./:;<=>?@[\]^_`{|}~'
-    import_errors = ['_„Ž','_„ñ','_ã_','_„','Ã±','ñ']
+    import_errors = ['_„Ž','_„ñ','_ã_','_„','Ã±','ñ','ð']
     df2 = dataframe.copy()
     for e in import_errors:
         df2[col] = df2[col].str.replace(e,'')
@@ -37,18 +43,45 @@ def clean_data(dataframe,col):
         df2[col] = df2[col].str.replace(p,'')
     return df2[col]
 
+def define_stopwords(add_to_list,remove_from_list,limit=None):
+    '''
+    Defines the stopwords to be removed from dataframe using the NLTK stopwords
+    as a base list
+
+    INPUT:  Words to add (list)
+            Words to remove (list)
+            Limit index of nltk stopwords list (integer)
+
+    OUTPUT: Adjusted stopwords (list)
+
+    '''
+    stop_words = stopwords.words('english')
+    stop_words_limit = stop_words[:limit]
+    stop_words_adj = set([word for word in stop_words_limit if word not in remove_from_list] + add_to_list)
+    return stop_words_adj
+
+def vectorize_tfidf(clean_data,ngrams,max_features):
+    vectorizer = TfidfVectorizer(ngram_range=ngrams,max_features=max_features,stop_words=stopwords)
+    tfidf_matrix = vectorizer.fit_transform(clean_data)
+    feature_names = vectorizer.get_feature_names()
+    return tfidf_matrix, feature_names
+
 def vectorize_and_cluster(clean_data,ngrams,clusters,max_features,num_returned):
     '''
     Transforms DataFrame Series into tfidf matrix, clusters the matrix
 
-    INPUT: Series, # of ngrams, # of cluster, # of max_features, # feature_names
-    OUTPUT: top-ranked feature_names
+    INPUT:  Cleaned series (series)
+            # of ngrams (tuple of two integers)
+            # of clusters (integer)
+            # of max_features (integer)
+            # of ranked feature_names (integer)
+
+    OUTPUT: Top-ranked feature_names (list)
 
     '''
-    vectorizer = TfidfVectorizer(ngram_range=ngrams,max_features=max_features,stop_words=stopwords)
-    tfidf_model = vectorizer.fit_transform(clean_data)
 
-    kmeans = KMeans(n_clusters=clusters).fit(tfidf_model)
+    tfidf_matrix, feature_names = vectorize_tfidf(clean_data,ngrams,max_features)
+    kmeans = KMeans(n_clusters=clusters).fit(tfidf_matrix)
     centroids = kmeans.cluster_centers_
     names = []
     for cluster in centroids:
@@ -56,17 +89,23 @@ def vectorize_and_cluster(clean_data,ngrams,clusters,max_features,num_returned):
         top_rows = sorted_cluster[:num_returned]
         indices = np.argsort(cluster)[::-1][:num_returned]
         for idx in indices:
-            names.append(vectorizer.get_feature_names()[idx])
-    return names
+            names.append(feature_names[idx])
+    return tfidf_matrix
 
-def elbow_method(Kmax,tfidf_matrix):
+def run_elbow_method(clean_data,ngrams,max_features,Kmax):
     '''
-    Loops through various cluster values and returns corresponding distortion sum
+    Loops through cluster values (K) and return corresponding distortion sum
 
-    INPUT: Max value of clusters (K) to loop through, tfidf matrix
-    OUTPUT: lists of K values, list of distortions
+    INPUT:  Cleaned series (series)
+            # of ngrams (tuple of two integers)
+            # of max_features (integer)
+            Max # of K (integer)
+
+    OUTPUT: K values (list)
+            Distortions (list)
 
     '''
+    tfidf_matrix, feature_names = vectorize_tfidf(clean_data,ngrams,max_features)
     distortions = []
     K = range(1,Kmax)
     for k in K:
@@ -80,35 +119,29 @@ def plot_elbow(K_lst,distortions,file_name):
     '''
     Plots results from elbow_method()
 
-    INPUT: lists of K values, list of distortions
-    OUTPUT: saved line graph
+    INPUT:  K values (list)
+            Distortions (list)
+
+    OUTPUT: Line graph figure (.png)
 
     '''
-    plt.plot(K, distortions, 'bx-')
+    plt.plot(K_lst, distortions, 'bx-')
     plt.xlabel('k')
     plt.ylabel('Distortion')
-    plt.title('The Elbow Method showing the optimal k')
+    plt.title('The Elbow Method showing the optimal k (5-star Reviews)')
+    plt.xticks(np.arange(min(K_lst), max(K_lst)+1, 2.0))
     plt.savefig(file_name)
     plt.close()
 
-def define_stopwords(add_to_list,remove_from_list,limit=None):
-    '''
-    Defines the stopwords to be removed from dataframe
 
-    INPUT: list, list, limit of nltk stopwords list
-    OUTPUT: list of final stopwords
-
-    '''
-    stop_words = stopwords.words('english')
-    stop_words_limit = stop_words[:limit]
-    stop_words_adj = set([word for word in stop_words_limit if word not in remove_from_list] + add_to_list)
-    return stop_words_adj
-
-def common_review_sentiments(df_list,col_name,ngram,cluster=1,max_features=5000,sentiments_returned=15):
+def generate_ranked_sentiments(df_list,col_name,ngram,cluster=1,max_features=5000,sentiments_returned=15):
     '''
     Cleans and vectorizes data and returns a dataframe of top sentiments
 
-    INPUT: list of dataframes, column name, ngram tuple)
+    INPUT:  List of dataframes (list)
+            Column name to find sentiments from (string)
+            Ngram (tuple of two integers)
+
     OUTPUT: DataFrame of top sentiments
 
     '''
@@ -116,17 +149,22 @@ def common_review_sentiments(df_list,col_name,ngram,cluster=1,max_features=5000,
     col_names = []
     for df in df_list:
         clean_data_list.append(clean_data(df,col_name))
+    # pdb.set_trace()
     for lst in clean_data_list:
         sentiment_list.append(vectorize_and_cluster(lst,ngram,cluster,max_features,sentiments_returned))
         df_name = [name for name in globals() if globals()[name] is lst]
         # col_names.append(df_name[0])
-    df = pd.DataFrame(sentiment_list,['5-star','1-star']).T
-    df.to_csv('common_review_sentiments.csv')
-    print(df)
+    df = pd.DataFrame(sentiment_list,['stars_5','stars_1']).T
+    file_name = str(ngram[0]) + 'word_sentiments_from_' + col_name + '.csv'
+    df.to_csv(file_name)
+    print (df)
 
-if __name__ == '__main__':
+def to_markdown(df, round_places=3):
+    """Returns a markdown, rounded representation of a dataframe"""
+    print(tabulate(df.round(round_places), headers='keys', tablefmt='pipe'))
 
-    df = pd.read_csv('data/amazon_reviews.csv', encoding='ISO-8859-1',usecols=[1,2,3,4,5,6])
-    stopwords = define_stopwords(['echo', 'generation','dot', 'dots','alexa' ],['more','not','against',"don't", "should've"],145)
-    stars_5,stars_1 = segment_stars(df,'review_rating',5,5), segment_stars(df,'review_rating',1,1)
-    common_review_sentiments([stars_5,stars_1],'review_text',(4,4))
+
+df = pd.read_csv('data/amazon_reviews.csv', encoding='ISO-8859-1',usecols=[1,2,3,4,5,6])
+stopwords = define_stopwords(['echo','room', 'generation','dot', 'dots','alexa' ],['more','not','against',"don't", "should've"],145)
+stars_5,stars_1 = segment_stars(df,'review_rating',5,5), segment_stars(df,'review_rating',1,1)
+# generate_ranked_sentiments([stars_5,stars_1],'review_text',(5,5))
