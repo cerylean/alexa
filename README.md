@@ -4,7 +4,7 @@
 
 ### Data Source
 
-Coming from a customer success background, I am constantly searching for ways to find and analyze feedback. Building on the idea that quantitative feedback is only one piece of the picture, I wanted to breakdown qualitative data to attempt to identify the insights within that could inform future iterations of the product, customer success and marketing strategies. The data I drew my analysis from was ~13,000 customer reviews of Amazon's Echo Dot (2nd Generation).  There were six columns included in the file:
+Coming from a customer success background, I am constantly searching for ways to find and analyze feedback. Building on the idea that quantitative feedback is only one piece of the puzzle, I wanted to breakdown qualitative data to attempt to identify the insights within that could inform future iterations of the product, customer success and marketing strategies. The data I drew my analysis from was ~13,000 customer reviews of Amazon's Echo Dot (2nd Generation).  There were six columns included in the file:
 
     - Date of Review (dd/mm/yy)
     - Review Header (string)
@@ -112,11 +112,15 @@ There are clear takeways in the resulting n-grams of the 5 star and 1 star revie
 
 ### Future Work
 
-For future iterations I would like to explore dividing the text into parts of speech to determine which verbs and adjectives are most associated with each review type.
+For future iterations I would like to:
 
-I would also like to spend more time analyzing Review Helpfulness and potentially create an additional word weighting system that puts a heavier emphasis on reviews that people found more helpful.
+- Explore dividing the text into parts of speech to determine which verbs and adjectives are most associated with each review type.
 
-It could also be fun to create a review generator that, based on a given star value, creates a fake review representative of general sentiment for that rating.
+- Question the underlying assumptions in the TFIDF matrix weighting
+
+- Spend more time analyzing Review Helpfulness and potentially create an additional word weighting system that puts a heavier emphasis on reviews that people found more helpful.
+
+- Create a review generator that, based on a given star value, creates a fake review representative of general sentiment for that rating.
 
 ### References
 
