@@ -108,7 +108,7 @@ However, since it didn't appear that the reviews could be readily clustered, I c
 
 There are clear takeways in the resulting n-grams of the 5 star and 1 star reviews. You can see multiple sentiments reflected that can inform the  future marketing and product iterations of the Echo dot.
 
-![key_words_animation](images/key_words_animation.gif)
+![key_words_animation](images/key_words_ani.gif)
 
 ### Future Work
 
