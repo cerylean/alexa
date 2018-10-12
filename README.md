@@ -5,6 +5,7 @@
 ### Data Source
 
 The data I drew my analysis from was ~13,000 reviews of Amazon's Echo Dot (2nd Generation).  There were four columns in the file:
+
     - Date of Review (dd/mm/yy)
     - Review Header (string)
     - Review Text (string)
