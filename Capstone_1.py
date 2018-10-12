@@ -90,7 +90,7 @@ def vectorize_and_cluster(clean_data,ngrams,clusters,max_features,num_returned):
         indices = np.argsort(cluster)[::-1][:num_returned]
         for idx in indices:
             names.append(feature_names[idx])
-    return tfidf_matrix
+    return names
 
 def run_elbow_method(clean_data,ngrams,max_features,Kmax):
     '''
@@ -154,17 +154,18 @@ def generate_ranked_sentiments(df_list,col_name,ngram,cluster=1,max_features=500
         sentiment_list.append(vectorize_and_cluster(lst,ngram,cluster,max_features,sentiments_returned))
         df_name = [name for name in globals() if globals()[name] is lst]
         # col_names.append(df_name[0])
-    df = pd.DataFrame(sentiment_list,['stars_5','stars_1']).T
-    file_name = str(ngram[0]) + 'word_sentiments_from_' + col_name + '.csv'
-    df.to_csv(file_name)
-    print (df)
+    df = pd.DataFrame(sentiment_list,['5-gram_5_star_review','5-gram_1_star_review']).T
+    # file_name = str(ngram[0]) + 'word_sentiments_from_' + col_name + '.csv'
+    # df.to_csv(file_name)
+    return (df)
 
-def to_markdown(df, round_places=3):
+def to_markdown(df):
     """Returns a markdown, rounded representation of a dataframe"""
-    print(tabulate(df.round(round_places), headers='keys', tablefmt='pipe'))
+    print(tabulate(df, headers='keys', tablefmt='pipe'))
 
 
 df = pd.read_csv('data/amazon_reviews.csv', encoding='ISO-8859-1',usecols=[1,2,3,4,5,6])
 stopwords = define_stopwords(['echo','room', 'generation','dot', 'dots','alexa' ],['more','not','against',"don't", "should've"],145)
 stars_5,stars_1 = segment_stars(df,'review_rating',5,5), segment_stars(df,'review_rating',1,1)
-# generate_ranked_sentiments([stars_5,stars_1],'review_text',(5,5))
+
+to_markdown(generate_ranked_sentiments([stars_5,stars_1],'review_text',(5,5)))
