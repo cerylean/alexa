@@ -14,11 +14,11 @@ Example of a 1-star Review:
 
 ### EDA
 
-![vocab_demonstration](images/vocab_demonstration.png)
+![vocab_demonstration](images/vocab_demo.png)
 
-![vector_demonstration](images/vector_demonstration.png)
+![vector_demonstration](images/vector_demo.png)
 
-![ngram_demonstration](images/ngram_demonstration.png)
+![ngram_demonstration](images/ngram_demo.png)
 
 
 ### Feature Engineering
@@ -44,5 +44,7 @@ Example of a 1-star Review:
 | 12 | would highly recommend product | get questions answered not      |
 | 13 | tp link smart plug             | would not connect wifi          |
 | 14 | kids love asking questions     | not stay connected internet     |
+
+![key_words](images/key_words.gif)
 ### Future Work
 ### References
