@@ -100,6 +100,9 @@ There are clear takeways in the resulting n-grams of the 5 star and 1 star revie
 For future iterations I would like to explore dividing the text into parts of speech to determine which verbs and adjectives are most associated with each review type.
 
 ### References
+
+http://datameetsmedia.com/bag-of-words-tf-idf-explained/
+
 https://towardsdatascience.com/clustering-based-unsupervised-learning-8d705298ae51
 
-https://www.youtube.com/channel/UCfzlCWGWYyIQ0aLC5w48gBQ
+https://www.youtube.com/watch?v=FLZvOKSCkxY&list=PLQVvvaa0QuDf2JswnfiGkliBInZnIC4HL
