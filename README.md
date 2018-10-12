@@ -30,7 +30,7 @@ The reviews are mostly positive as shown by the below distribution of the star r
 
 ##### Bag-of-Words Model
 
-The Bag-of-Words Model is a simplifying representation of large amounts of text used in Natural Language Processing.  It is also known as the vector space model. It transforms all the words in a set of documents into a single list of unique words and then creates a matrix, assigning each unique word to a column, and each document (in this case each review) to an individual row. As you can see in a simplified version below, each field is then assigned a numerical value based on the number of occurrences of each word in that particular document.
+The Bag-of-Words Model (known also as the vector space model) is a simplifying representation of large amounts of text used in Natural Language Processing. It transforms all the words in a set of documents into a single list of unique words. It then creates a matrix, assigning each unique word to a column, and each document (in this case each review) to an individual row. As you can see in a simplified version below, each field is then assigned a numerical value based on the number of occurrences of each word in that particular document.
 
 **Creating a list of unique words:**
 
@@ -42,7 +42,7 @@ The Bag-of-Words Model is a simplifying representation of large amounts of text 
 
 #####  N-grams
 
-N-grams are a continues sequence of n number of words.  In certain cases, it is better to analyze text using sequences of words in order to derive a more complete context of meaning.  
+N-grams are a continuous sequence of n number of words.  In certain cases, it is better to analyze text using sequences of words in order to derive a more complete context of meaning.  
 
 **Example of a bi-gram:**
 
@@ -56,12 +56,18 @@ The formula for TF is defined as:
 
 ![TF](images/tf_formula.png)
 
+Where you are counting the frequency of the words within a given document.
+
 The formula for IDF is defined as:
 
 ![TF](images/idf_formula.png)
 
+Where you are taking the log of total documents divided by the number of documents a word appears in. In effect, penalizing words that appear across multiple documents.
+
 And the formula for their combination is defined as:
 ![TF](images/tfidf_formula.png)
+
+In order to achieve a high TFIDF weight, words (or ngrams) must appear multiple times within a given document, but fewer number of times across the corpus of documents.
 
 ### Vectorisizing
 
