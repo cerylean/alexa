@@ -92,46 +92,7 @@ def vectorize_and_cluster(clean_data,ngrams,clusters,max_features,num_returned):
             names.append(feature_names[idx])
     return names
 
-def run_elbow_method(clean_data,ngrams,max_features,Kmax):
-    '''
-    Loops through cluster values (K) and return corresponding distortion sum
 
-    INPUT:  Cleaned series (series)
-            # of ngrams (tuple of two integers)
-            # of max_features (integer)
-            Max # of K (integer)
-
-    OUTPUT: K values (list)
-            Distortions (list)
-
-    '''
-    tfidf_matrix, feature_names = vectorize_tfidf(clean_data,ngrams,max_features)
-    distortions = []
-    K = range(1,Kmax)
-    for k in K:
-        kmeans = KMeans(n_clusters=k)
-        kmeans.fit(tfidf_matrix)
-        labels = kmeans.labels_
-        distortions.append(kmeans.inertia_)
-    return list(K),distortions
-
-def plot_elbow(K_lst,distortions,file_name):
-    '''
-    Plots results from elbow_method()
-
-    INPUT:  K values (list)
-            Distortions (list)
-
-    OUTPUT: Line graph figure (.png)
-
-    '''
-    plt.plot(K_lst, distortions, 'bx-')
-    plt.xlabel('k')
-    plt.ylabel('Distortion')
-    plt.title('The Elbow Method showing the optimal k (5-star Reviews)')
-    plt.xticks(np.arange(min(K_lst), max(K_lst)+1, 2.0))
-    plt.savefig(file_name)
-    plt.close()
 
 
 def generate_ranked_sentiments(df_list,col_name,ngram,cluster=1,max_features=5000,sentiments_returned=15):
@@ -160,12 +121,14 @@ def generate_ranked_sentiments(df_list,col_name,ngram,cluster=1,max_features=500
     return (df)
 
 def to_markdown(df):
-    """Returns a markdown, rounded representation of a dataframe"""
+    '''
+    Returns a markdown, rounded representation of a dataframe
+    '''
     print(tabulate(df, headers='keys', tablefmt='pipe'))
 
+if __name__ == '__main__':
 
-df = pd.read_csv('data/amazon_reviews.csv', encoding='ISO-8859-1',usecols=[1,2,3,4,5,6])
-stopwords = define_stopwords(['echo','room', 'generation','dot', 'dots','alexa' ],['more','not','against',"don't", "should've"],145)
-stars_5,stars_1 = segment_stars(df,'review_rating',5,5), segment_stars(df,'review_rating',1,1)
-
-to_markdown(generate_ranked_sentiments([stars_5,stars_1],'review_text',(5,5)))
+    df = pd.read_csv('data/amazon_reviews.csv', encoding='ISO-8859-1',usecols=[1,2,3,4,5,6])
+    stopwords = define_stopwords(['echo','room', 'generation','dot', 'dots','alexa' ],['more','not','against',"don't", "should've"],145)
+    stars_5,stars_1 = segment_stars(df,'review_rating',5,5), segment_stars(df,'review_rating',1,1)
+    to_markdown(generate_ranked_sentiments([stars_5,stars_1],'review_text',(5,5)))
