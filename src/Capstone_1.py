@@ -61,6 +61,14 @@ def define_stopwords(add_to_list,remove_from_list,limit=None):
     return stop_words_adj
 
 def vectorize_tfidf(clean_data,ngrams,max_features):
+    '''
+    INPUT:  Cleaned series (series)
+            # of ngrams (tuple of two integers)
+            # of max features (integer)
+
+    OUTPUT: TFIDF matrix (sparse matrix)
+            Feature names (list)
+    '''
     vectorizer = TfidfVectorizer(ngram_range=ngrams,max_features=max_features,stop_words=stopwords)
     tfidf_matrix = vectorizer.fit_transform(clean_data)
     feature_names = vectorizer.get_feature_names()
@@ -73,10 +81,10 @@ def vectorize_and_cluster(clean_data,ngrams,clusters,max_features,num_returned):
     INPUT:  Cleaned series (series)
             # of ngrams (tuple of two integers)
             # of clusters (integer)
-            # of max_features (integer)
-            # of ranked feature_names (integer)
+            # of max features (integer)
+            # of ranked feature names (integer)
 
-    OUTPUT: Top-ranked feature_names (list)
+    OUTPUT: Top-ranked feature names (list)
 
     '''
 
@@ -107,28 +115,30 @@ def generate_ranked_sentiments(df_list,col_name,ngram,cluster=1,max_features=500
 
     '''
     clean_data_list, sentiment_list = [],[]
-    col_names = []
+    ratings = [list(df2['review_rating'].unique()) for df2 in df_list]
+    col_names = [f"{star}_Star_Reviews" for star in ratings]
     for df in df_list:
         clean_data_list.append(clean_data(df,col_name))
-    # pdb.set_trace()
     for lst in clean_data_list:
         sentiment_list.append(vectorize_and_cluster(lst,ngram,cluster,max_features,sentiments_returned))
-        df_name = [name for name in globals() if globals()[name] is lst]
-        # col_names.append(df_name[0])
-    df = pd.DataFrame(sentiment_list,['5-gram_5_star_review','5-gram_1_star_review']).T
-    # file_name = str(ngram[0]) + 'word_sentiments_from_' + col_name + '.csv'
-    # df.to_csv(file_name)
+    df = pd.DataFrame(sentiment_list,col_names).T
+    file_name = str(ngram[0]) + 'word_sentiments_from_' + col_name + '.csv'
+    df.to_csv(file_name)
     return (df)
 
 def to_markdown(df):
     '''
     Returns a markdown, rounded representation of a dataframe
+
+    INPUT: DataFrame
+
+    OUTPUT: Formatted DataFrame
     '''
     print(tabulate(df, headers='keys', tablefmt='pipe'))
 
 if __name__ == '__main__':
 
-    df = pd.read_csv('data/amazon_reviews.csv', encoding='ISO-8859-1',usecols=[1,2,3,4,5,6])
+    df = pd.read_csv('../data/amazon_reviews.csv', encoding='ISO-8859-1',usecols=[1,2,3,4,5,6])
     stopwords = define_stopwords(['echo','room', 'generation','dot', 'dots','alexa' ],['more','not','against',"don't", "should've"],145)
     stars_5,stars_1 = segment_stars(df,'review_rating',5,5), segment_stars(df,'review_rating',1,1)
     to_markdown(generate_ranked_sentiments([stars_5,stars_1],'review_text',(5,5)))

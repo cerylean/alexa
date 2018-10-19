@@ -2,6 +2,9 @@
 
   ![Alexa](images/Alexa_Title.png)
 
+By Lyssa Treibitz
+October 2018
+
 ### Data Source
 
 Coming from a customer success background, I am constantly searching for ways to find and analyze feedback. Building on the idea that quantitative feedback is only one piece of the puzzle, I wanted to breakdown qualitative data to attempt to identify the insights within that could inform future iterations of the product, customer success and marketing strategies. The data I drew my analysis from was ~13,000 customer reviews of Amazon's Echo Dot (2nd Generation).  There were six columns included in the file:

@@ -16,6 +16,13 @@ mpl.rcParams.update({
 })
 
 def plot_histogram(df,col_name):
+    '''
+    INPUT:  DataFrame
+            Column name (string)
+
+    OUTPUT: Histogram figure (.png)
+
+    '''
     plt.hist(df[col_name],bins=5)
     plt.title('Distribution of Star Ratings', fontweight="bold")
     plt.xticks([1,2,3,4,5])
