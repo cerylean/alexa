@@ -72,7 +72,7 @@ And the formula for their combination is defined as:
 
 In order to achieve a high TFIDF weight, words (or ngrams) must appear multiple times within a given document, but fewer number of times across the corpus of documents.
 
-### Vectorisizing
+### Vectorizing
 
 
 #### Cleaning
